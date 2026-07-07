@@ -1,0 +1,43 @@
+{
+  "cart": {
+    "lines": [
+      {
+        "id": "gid://shopify/CartLine/1",
+        "quantity": 11,
+        "merchandise": {
+          "__typename": "ProductVariant",
+          "product": { "id": "gid://shopify/Product/100" }
+        }
+      },
+      {
+        "id": "gid://shopify/CartLine/2",
+        "quantity": 2,
+        "merchandise": {
+          "__typename": "ProductVariant",
+          "product": { "id": "gid://shopify/Product/100" }
+        }
+      },
+      {
+        "id": "gid://shopify/CartLine/3",
+        "quantity": 50,
+        "merchandise": {
+          "__typename": "ProductVariant",
+          "product": { "id": "gid://shopify/Product/999" }
+        }
+      }
+    ]
+  },
+  "discount": {
+    "discountClasses": ["PRODUCT"],
+    "metafield": {
+      "jsonValue": {
+        "productIds": ["gid://shopify/Product/100"],
+        "tiers": [
+          { "minQuantity": 3, "valueType": "PERCENTAGE", "value": 5 },
+          { "minQuantity": 5, "valueType": "PERCENTAGE", "value": 10 },
+          { "minQuantity": 10, "valueType": "PERCENTAGE", "value": 15 }
+        ]
+      }
+    }
+  }
+}

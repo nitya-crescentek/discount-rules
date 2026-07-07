@@ -32,3 +32,42 @@ model Session {
   refreshToken        String?
   refreshTokenExpires DateTime?
 }
+
+// A merchant-configured quantity discount rule. Prisma is the editable source
+// of truth; on save the rule is mirrored into a Shopify automatic discount's
+// jsonValue metafield (wired up in Phase 3) for the checkout function to read.
+model DiscountRule {
+  id          String    @id @default(cuid())
+  shop        String
+  title       String
+  // DRAFT | ACTIVE
+  status      String    @default("DRAFT")
+  // PRODUCT | COLLECTION — what `targets` point at
+  targetType  String    @default("PRODUCT")
+  // JSON string: [{ "id": "gid://shopify/Product/1", "title": "..." }]
+  targets     String    @default("[]")
+  // Shopify automatic discount GID, null until synced in Phase 3
+  discountGid String?
+  // Optional scheduling window (surfaced in the UI in a later phase)
+  startsAt    DateTime?
+  endsAt      DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tiers DiscountTier[]
+
+  @@index([shop])
+}
+
+// One quantity threshold within a rule, e.g. minQuantity 5 -> 10% off.
+model DiscountTier {
+  id          String   @id @default(cuid())
+  ruleId      String
+  rule        DiscountRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  minQuantity Int
+  // PERCENTAGE | FIXED_AMOUNT
+  valueType   String
+  value       Float
+
+  @@index([ruleId])
+}

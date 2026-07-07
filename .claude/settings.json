@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__shopify-dev-mcp__learn_shopify_api",
+      "Bash(ls node_modules/.bin/prisma)",
+      "Bash(ls prisma/)",
+      "Bash(ls prisma/dev.sqlite)",
+      "Bash(ls prisma/migrations)",
+      "Bash(npx prisma *)",
+      "PowerShell(Get-Process node -ErrorAction SilentlyContinue | Select-Object Id, ProcessName, StartTime, @{N='CmdLine';E={\\(Get-CimInstance Win32_Process -Filter \"ProcessId=$\\($_.Id\\)\"\\).CommandLine}} | Format-List)",
+      "mcp__shopify-dev-mcp__validate_component_codeblocks",
+      "Bash(npx eslint *)",
+      "mcp__shopify-dev-mcp__search_docs_chunks",
+      "Bash(shopify app *)"
+    ]
+  }
+}
