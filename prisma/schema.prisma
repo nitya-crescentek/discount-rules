@@ -5,12 +5,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Note that some adapters may set a maximum length for the String type by default, please ensure your strings are long
-// enough when changing adapters.
-// See https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string for more information
+// Supabase Postgres. `url` is the pooled (pgBouncer) connection used at runtime;
+// `directUrl` is the direct 5432 connection Prisma uses for migrations.
+// See https://supabase.com/docs/guides/database/prisma
 datasource db {
-  provider = "sqlite"
-  url      = "file:dev.sqlite"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Session {
@@ -31,14 +32,37 @@ model Session {
   emailVerified Boolean?  @default(false)
   refreshToken        String?
   refreshTokenExpires DateTime?
+
+  @@index([shop])
 }
 
-// A merchant-configured quantity discount rule. Prisma is the editable source
-// of truth; on save the rule is mirrored into a Shopify automatic discount's
-// jsonValue metafield (wired up in Phase 3) for the checkout function to read.
+// One row per store that has installed the app. This is the tenant registry and
+// the anchor for any future per-store data (plan, billing, preferences). The
+// `domain` (e.g. "acme.myshopify.com") is the stable, human-identifiable key
+// that every other store-owned table references.
+model Shop {
+  id            String    @id @default(cuid())
+  domain        String    @unique
+  name          String?
+  active        Boolean   @default(true)
+  installedAt   DateTime  @default(now())
+  uninstalledAt DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  discountRules DiscountRule[]
+}
+
+// A merchant-configured quantity discount rule. Editable source of truth; on
+// save an ACTIVE rule is mirrored into a Shopify automatic discount + metafield.
 model DiscountRule {
   id          String    @id @default(cuid())
+  // Tenant key: the store's myshopify domain. Present on every store-owned row
+  // so data is trivially attributable to a store, and FK-enforced against Shop
+  // so a rule can never exist for an unknown/mismatched store.
   shop        String
+  store       Shop      @relation(fields: [shop], references: [domain], onDelete: Cascade)
+
   title       String
   // DRAFT | ACTIVE
   status      String    @default("DRAFT")
@@ -46,9 +70,9 @@ model DiscountRule {
   targetType  String    @default("PRODUCT")
   // JSON string: [{ "id": "gid://shopify/Product/1", "title": "..." }]
   targets     String    @default("[]")
-  // Shopify automatic discount GID, null until synced in Phase 3
+  // Shopify automatic discount GID, null until synced
   discountGid String?
-  // Optional scheduling window (surfaced in the UI in a later phase)
+  // Optional scheduling window
   startsAt    DateTime?
   endsAt      DateTime?
   createdAt   DateTime  @default(now())
@@ -57,9 +81,11 @@ model DiscountRule {
   tiers DiscountTier[]
 
   @@index([shop])
+  @@index([shop, status])
 }
 
-// One quantity threshold within a rule, e.g. minQuantity 5 -> 10% off.
+// One quantity threshold within a rule, e.g. minQuantity 5 -> 10% off. Scoped to
+// a store transitively through its parent rule (cascade-deleted with it).
 model DiscountTier {
   id          String   @id @default(cuid())
   ruleId      String

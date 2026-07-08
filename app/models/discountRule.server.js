@@ -164,8 +164,19 @@ export function validateRule(input) {
   return errors;
 }
 
+// Ensures a Shop registry row exists for this domain. Safe to call anytime;
+// guarantees the DiscountRule -> Shop foreign key is always satisfiable.
+export async function ensureShop(domain) {
+  return prisma.shop.upsert({
+    where: { domain },
+    update: { active: true, uninstalledAt: null },
+    create: { domain },
+  });
+}
+
 export async function createRule(shop, input) {
   const data = normalize(input);
+  await ensureShop(shop);
   const rule = await prisma.discountRule.create({
     data: {
       shop,

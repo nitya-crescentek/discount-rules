@@ -12,5 +12,12 @@ export const action = async ({ request }) => {
     await db.session.deleteMany({ where: { shop } });
   }
 
+  // Flag the store as uninstalled in the tenant registry. Rules are kept so the
+  // merchant's config survives a reinstall; afterAuth reactivates the Shop.
+  await db.shop.updateMany({
+    where: { domain: shop },
+    data: { active: false, uninstalledAt: new Date() },
+  });
+
   return new Response();
 };

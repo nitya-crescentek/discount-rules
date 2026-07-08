@@ -19,6 +19,17 @@ const shopify = shopifyApp({
   future: {
     expiringOfflineAccessTokens: true,
   },
+  hooks: {
+    // Register the store in our tenant registry as soon as it installs, so
+    // per-store data always has a Shop to hang off of.
+    afterAuth: async ({ session }) => {
+      await prisma.shop.upsert({
+        where: { domain: session.shop },
+        update: { active: true, uninstalledAt: null },
+        create: { domain: session.shop },
+      });
+    },
+  },
   ...(process.env.SHOP_CUSTOM_DOMAIN
     ? { customShopDomains: [process.env.SHOP_CUSTOM_DOMAIN] }
     : {}),
