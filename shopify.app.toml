@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "233621e306123b053f55b2c64917b728"
-application_url = "https://discount-rules.vercel.app/"
+application_url = "https://discount-rules.vercel.app"
 embedded = true
 name = "Discount_Rules"
 
@@ -35,8 +35,8 @@ api_version = "2026-10"
   compliance_topics = [ "shop/redact" ]
 
 [auth]
-redirect_urls = [ "https://discount-rules.vercel.app/api/auth" ]
+redirect_urls = [ "https://discount-rules.vercel.app/auth/callback" ]
 
 [build]
 include_config_on_deploy = true
-automatically_update_urls_on_dev = true
+automatically_update_urls_on_dev = false
