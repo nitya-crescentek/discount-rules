@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "233621e306123b053f55b2c64917b728"
-application_url = "https://example.com"
+application_url = "https://discount-rules.vercel.app/"
 embedded = true
 name = "Discount_Rules"
 
@@ -20,20 +20,22 @@ api_version = "2026-10"
   uri = "/webhooks/app/scopes_update"
   topics = [ "app/scopes_update" ]
 
+  # Mandatory compliance webhooks for public (App Store) distribution.
+  # These use `compliance_topics`, not `topics`.
   [[webhooks.subscriptions]]
   uri = "/webhooks/customers/data_request"
-  topics = [ "customers/data_request" ]
+  compliance_topics = [ "customers/data_request" ]
 
   [[webhooks.subscriptions]]
   uri = "/webhooks/customers/redact"
-  topics = [ "customers/redact" ]
+  compliance_topics = [ "customers/redact" ]
 
   [[webhooks.subscriptions]]
   uri = "/webhooks/shop/redact"
-  topics = [ "shop/redact" ]
+  compliance_topics = [ "shop/redact" ]
 
 [auth]
-redirect_urls = [ "https://example.com/api/auth" ]
+redirect_urls = [ "https://discount-rules.vercel.app/api/auth" ]
 
 [build]
 include_config_on_deploy = true
