@@ -19,7 +19,6 @@
       "routes/auth.$": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
       "routes/_index": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
       "routes/app.rules._index": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
-      "routes/app.additional": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
       "routes/app.rules.$id": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
       "routes/app.rules.new": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
       "routes/app._index": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0"
@@ -116,15 +115,6 @@
         "file": "app/routes/app.rules._index.jsx",
         "path": "rules",
         "index": true,
-        "config": {
-          "runtime": "nodejs"
-        }
-      },
-      "routes/app.additional": {
-        "id": "routes/app.additional",
-        "parentId": "routes/app",
-        "file": "app/routes/app.additional.jsx",
-        "path": "additional",
         "config": {
           "runtime": "nodejs"
         }
@@ -238,12 +228,6 @@
         "path": "rules",
         "index": true
       },
-      "routes/app.additional": {
-        "id": "routes/app.additional",
-        "parentId": "routes/app",
-        "file": "routes/app.additional.jsx",
-        "path": "additional"
-      },
       "routes/app.rules.$id": {
         "id": "routes/app.rules.$id",
         "parentId": "routes/app",
@@ -328,11 +312,6 @@
                 "file": "routes/app.rules._index.jsx",
                 "path": "rules",
                 "index": true
-              },
-              {
-                "id": "routes/app.additional",
-                "file": "routes/app.additional.jsx",
-                "path": "additional"
               },
               {
                 "id": "routes/app.rules.$id",
