@@ -308,7 +308,7 @@ export default function RuleForm({ mode = "new", rule, errors = {} }) {
         >
           {mode === "edit" ? "Save changes" : "Create rule"}
         </s-button>
-        <s-button variant="tertiary" onClick={() => navigate("/app/rules")}>
+        <s-button variant="tertiary" onClick={() => navigate("/app")}>
           Cancel
         </s-button>
         {mode === "edit" && !confirmingDelete && (

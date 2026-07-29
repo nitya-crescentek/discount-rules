@@ -15,7 +15,7 @@ export const loader = async ({ request, params }) => {
   const { session } = await authenticate.admin(request);
   const rule = await getRule(session.shop, params.id);
   if (!rule) {
-    return redirect("/app/rules");
+    return redirect("/app");
   }
   return { rule };
 };
@@ -37,7 +37,7 @@ export const action = async ({ request, params }) => {
       }
     }
     await deleteRule(session.shop, params.id);
-    return redirect("/app/rules?saved=deleted");
+    return redirect("/app?saved=deleted");
   }
 
   let input;
@@ -54,7 +54,7 @@ export const action = async ({ request, params }) => {
 
   const rule = await updateRule(session.shop, params.id, input);
   if (!rule) {
-    return redirect("/app/rules");
+    return redirect("/app");
   }
 
   try {
@@ -73,7 +73,7 @@ export const action = async ({ request, params }) => {
     return { errors: { form: `Saved, but syncing to Shopify failed: ${error.message}` } };
   }
 
-  return redirect("/app/rules?saved=updated");
+  return redirect("/app?saved=updated");
 };
 
 export default function EditRule() {

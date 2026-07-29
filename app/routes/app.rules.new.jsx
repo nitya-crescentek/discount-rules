@@ -45,7 +45,7 @@ export const action = async ({ request }) => {
     }
   }
 
-  return redirect("/app/rules?saved=created");
+  return redirect("/app?saved=created");
 };
 
 export default function NewRule() {
